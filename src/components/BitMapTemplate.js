@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BitMapping from "./BitMapping";
 
 const BitMapTemplate = () => {
@@ -20,11 +20,14 @@ const BitMapTemplate = () => {
     const onChangeTable = ({ target }) => {
         const newInput = { ...table };
         newInput[target.name] = parseInt(target.value, 10);
-        
         setTable(newInput);
+    };
+
+    useEffect(() => {
         setBoard(emptyBoard(table.row, table.col));
         setBinary(new Array(table.row).fill(0));
-    };
+    }, [table]);
+
 
     const deepClone = (obj) => {
         if (obj === null) return null;
