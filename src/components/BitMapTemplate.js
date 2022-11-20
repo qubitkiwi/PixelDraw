@@ -2,76 +2,69 @@ import React, { useState } from "react";
 import BitMapping from "./BitMapping";
 
 const BitMapTemplate = () => {
+
     const [ table, setTable ] = useState({
         col: 5,
         row: 7,
         decimal: 16,
     });
 
-    Array.matrix = function (m, n, initial) {
-        var a, i, j, mat = [];
-        for (i = 0; i < m; i += 1) {
-            a = [];
-            for (j = 0; j < n; j += 1) {
-                a[j] = {bit : initial};
-            }
-            mat[i] = a;
-        }
-        return mat;
+    const emptyBoard = (row, col) =>
+        Array.from(new Array(row), () =>
+        Array.from(new Array(col), () => (false))
+    );
+
+    const [board, setBoard] = useState(emptyBoard(table.row, table.col));
+    const [binary, setBinary] = useState(new Array(table.row).fill(0));
+
+    const onChangeTable = ({ target }) => {
+        const newInput = { ...table };
+        newInput[target.name] = parseInt(target.value, 10);
+        
+        setTable(newInput);
+        setBoard(emptyBoard(table.row, table.col));
+        setBinary(new Array(table.row).fill(0));
     };
 
-    const [board, setBoard] = useState(Array.matrix(table.row, table.col, false));
-    // const [board, setBoard] = useState(emptyBoard(table.row, table.col, false));
-
-    // const emptyBoard = (row, col) =>
-    //     Array.from(new Array(row), () =>
-    //     Array.from(new Array(col), () => (false))
-    // );
-
-    const onChangeTable = (e) => {
-        setTable({
-            ...table,
-            [e.target.name]: e.target.value,
+    const deepClone = (obj) => {
+        if (obj === null) return null;
+        const clone = { ...obj };
+        Object.keys(clone).forEach((key) => {
+          clone[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key];
         });
-        // setBoard(emptyBoard(table.row, table.col, false));
-        setBoard(Array.matrix(table.row, table.col, false));
-    };
-
-    function clone(source) {
-        var target = {};
-        for (let i in source) {
-          if (source[i] != null && typeof source[i] === "object") {
-            target[i] = clone(source[i]); // resursion
-          } else {
-            target[i] = source[i];
-          }
+        if (Array.isArray(obj)) {
+          clone.length = obj.length;
+          return Array.from(clone);
         }
-        return target;
-      }
+        return clone;
+    };
       
     const handleClick = (row, col) => {
-        const newBoard = clone(board);
-        const select = newBoard[row][col];
-        select.bit = !select.bit;
+        const newBoard = deepClone(board);
+        const bit = newBoard[row][col];
+        newBoard[row][col] = !newBoard[row][col];
         setBoard(newBoard);
-    };
 
-    console.log(board[0]);
-    console.log(board[0][1].bit);
+        const newBinary = deepClone(binary);
+        const sign = bit ? -1 : 1;
+        newBinary[row] += sign*2**(table.col - col -1);
+
+        setBinary(newBinary);
+    };
 
     return (
         <div>
             <div onChange={onChangeTable}>
-                <input type="number" id="col" name="col" min="1"  value={table.col}></input>
-                <input type="number" id="row" name="row" min="1" value={table.row}></input>
-                <select id="decimal" name="decimal">
+                <input type="number" id="col" name="col" min="1"  defaultValue={table.col}></input>
+                <input type="number" id="row" name="row" min="1" defaultValue={table.row}></input>
+                <select id="decimal" name="decimal" defaultValue={table.decimal}>
                     <option value= {2} >2</option>
                     <option value={10}>10</option>
-                    <option value={16} selected>16</option>
+                    <option value={16}>16</option>
                 </select>
             </div>
 
-            <BitMapping table={table} board={board} onClick={handleClick}></BitMapping>
+            <BitMapping table={table} board={board} binary={binary} onClick={handleClick}></BitMapping>
         </div>
     );
 };
