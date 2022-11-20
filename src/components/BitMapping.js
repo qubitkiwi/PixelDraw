@@ -1,34 +1,29 @@
 // import PropTypes from 'prop-types';
 
-const BitMapping = ({table, board, binary, onClick}) => {
+const BitMapping = ({styles, table, board, binary, onClick}) => {
   const jsx = board.map((row, i) => (
-    <div>
+    <div className={styles.nowrap}>
         {row.map((item, j) => (
             <button 
                 key={`${i},${j}`} 
                 type="button"
+                className={item ? styles.black : styles.white}
                 onClick={() => onClick(i, j)}
             >
                 {item ? 1:0}
             </button>
         ))}
-        { parseInt(binary[i], 10).toString(table.decimal)}
+        <div className={styles.hex}>
+            0x
+            { parseInt(binary[i], 10).toString(table.decimal)}
+        </div>   
     </div>
 ));
 
 
     return (
-        <div>
-            
-            <p>{table.col}</p>
-            <p>{table.row}</p>
-            <p>{table.decimal}</p>
-            <p>{board[0][0] ? 1 : 0}</p>
-            
-            <div>
-            {jsx}
-            </div>
-
+        <div className={styles.board}>
+        {jsx}
         </div>
     );
 };

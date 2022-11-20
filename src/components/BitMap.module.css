@@ -1,0 +1,32 @@
+.board button {
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  font-size: 25px;
+  text-align: center;
+  line-height: 25px;
+  vertical-align: top;
+  border: 1px solid black;
+  /* background-color: white; */
+}
+
+.board button.black {
+  color: black;
+  background-color: black;
+}
+
+.board button.white {
+  color: white;
+  background-color: white;
+}
+
+.board div.nowrap {
+  white-space: nowrap;
+  width:fit-content;
+}
+
+.board div.hex {
+  float: right;
+  font-size: 20px;
+};

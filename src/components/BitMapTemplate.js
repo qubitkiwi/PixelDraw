@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BitMapping from "./BitMapping";
+import styles from "./BitMap.module.css";
 
 const BitMapTemplate = () => {
 
@@ -57,6 +58,29 @@ const BitMapTemplate = () => {
 
     return (
         <div>
+            {/* <table>
+                <thead>
+                    <tr>
+                        <th>가로</th>
+                        <th>세로</th>
+                        <th>n진수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th><input type="number" id="col" name="col" min="1"  defaultValue={table.col} onChange={onChangeTable}></input></th>
+                        <th><input type="number" id="row" name="row" min="1" defaultValue={table.row} onChange={onChangeTable}></input></th>
+                        <th>
+                        <select id="decimal" name="decimal" defaultValue={table.decimal} onChange={onChangeTable}>
+                            <option value= {2} >2</option>
+                            <option value={10}>10</option>
+                            <option value={16}>16</option>
+                        </select>
+                        </th>
+                    </tr>
+                </tbody>
+            </table> */}
+
             <div onChange={onChangeTable}>
                 <input type="number" id="col" name="col" min="1"  defaultValue={table.col}></input>
                 <input type="number" id="row" name="row" min="1" defaultValue={table.row}></input>
@@ -67,7 +91,13 @@ const BitMapTemplate = () => {
                 </select>
             </div>
 
-            <BitMapping table={table} board={board} binary={binary} onClick={handleClick}></BitMapping>
+            <BitMapping 
+                styles={styles} 
+                table={table} 
+                board={board} 
+                binary={binary} 
+                onClick={handleClick}
+            />
         </div>
     );
 };
