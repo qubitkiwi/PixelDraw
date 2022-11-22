@@ -1,8 +1,8 @@
-import BitMapTemplate from './components/BitMapTemplate';
+import PixelDraw from './PixelDraw';
 
 function App() {
   return (
-    <BitMapTemplate></BitMapTemplate>
+    <PixelDraw />
   );
 }
 

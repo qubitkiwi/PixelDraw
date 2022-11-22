@@ -1,3 +1,9 @@
+.box {
+  /* white-space: nowrap; */
+  width:fit-content;
+  margin:0 auto; 
+}
+
 .board button {
   margin: 0;
   padding: 0;
