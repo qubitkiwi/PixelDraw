@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/PixelDraw/static/css/main.aaad970a.css",
+    "main.js": "/PixelDraw/static/js/main.83e05862.js",
+    "static/js/787.c67f37cd.chunk.js": "/PixelDraw/static/js/787.c67f37cd.chunk.js",
+    "index.html": "/PixelDraw/index.html",
+    "main.aaad970a.css.map": "/PixelDraw/static/css/main.aaad970a.css.map",
+    "main.83e05862.js.map": "/PixelDraw/static/js/main.83e05862.js.map",
+    "787.c67f37cd.chunk.js.map": "/PixelDraw/static/js/787.c67f37cd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aaad970a.css",
+    "static/js/main.83e05862.js"
+  ]
+}
