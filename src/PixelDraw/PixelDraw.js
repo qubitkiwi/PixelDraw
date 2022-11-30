@@ -14,10 +14,15 @@ import BitMapping from "./PixelMap";
 import styles from "./PixelDraw.module.css";
 
 const PixelDraw = () => {
-
+    
     const [ table, setTable ] = useState({
         col: 5,
         row: 7,
+    });
+
+    const [diff, setDiff] = useState({
+        col: table.col,
+        row: table.row,
     });
 
     const [decimal, setDecimal] = useState(16);
@@ -32,14 +37,16 @@ const PixelDraw = () => {
 
     const onChangeTable = ({ target }) => {
         const newInput = { ...table };
-        newInput[target.name] = parseInt(target.value, 10);
-        setTable(newInput);
+        const value = parseInt(target.value, 10);
+        newInput[target.name] = value;
+        setDiff(newInput);
     };
-    
+
     useEffect(() => {
-        setBoard(emptyBoard(table.row, table.col));
-        setBinary(new Array(table.row).fill(0));
-    }, [table]);
+        if ( Math.abs(table.col - diff.col) === 1 || Math.abs(table.row - diff.row) === 1) {
+            update();
+        }
+    }, [diff]);
 
     const onChangeDecimal = ({ target  }) => {
         setDecimal(parseInt(target.value, 10));
@@ -58,6 +65,18 @@ const PixelDraw = () => {
         }
         return clone;
     };
+
+    const table_copy = (new_table, old_table) => {
+        const min_row = new_table.length < old_table.length ? new_table.length : old_table.length;
+        const min_col = new_table[0].length < old_table[0].length ? new_table[0].length : old_table[0].length;
+        
+        for (let i = 0; i < min_row; i++) {
+            for (let j=0; j < min_col; j++) {
+                new_table[i][j] = old_table[i][j];
+            }
+        }
+    };
+
       
     const handleClick = (row, col) => {
         const newBoard = deepClone(board);
@@ -77,6 +96,30 @@ const PixelDraw = () => {
         setBinary(new Array(table.row).fill(0));
     };
 
+    const update = ()=> {
+        if (diff !== table) {
+            const newBoard = emptyBoard(diff.row, diff.col);
+            table_copy(newBoard, board);
+            setBoard(newBoard);
+            setTable(diff);
+            calculate_binary();
+        }
+    };
+
+
+    const calculate_binary = ()=> {
+        const new_binary = new Array(diff.row).fill(0);
+        for(let i=0; i<board.length; i++) {
+            for (let j=0; j<board[0].length; j++) {
+                const sign = board[i][j] ? 1 : 0;
+                new_binary[i] += sign*2**(diff.col - j -1);
+            }
+        }
+        setBinary(new_binary);
+    };
+
+
+
     return (
         <div>
             <Box className={styles.box}>
@@ -90,6 +133,7 @@ const PixelDraw = () => {
                                 defaultValue={table.col} 
                                 label="가로" 
                                 onChange={onChangeTable}
+                                onBlur={update}
                             />
                             <TextField 
                                 name="row" 
@@ -98,6 +142,7 @@ const PixelDraw = () => {
                                 defaultValue={table.row} 
                                 label="세로" 
                                 onChange={onChangeTable}
+                                onBlur={update}
                             />
 
                             <InputLabel id="decimal-label">진수</InputLabel>
@@ -114,7 +159,10 @@ const PixelDraw = () => {
                                 <MenuItem value={10}>10</MenuItem>
                                 <MenuItem value={16}>16</MenuItem>
                             </Select>
-                            <Button  variant="contained" onClick={reset}>reset</Button>
+                            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                                <Button variant="outlined" onClick={update}>update</Button>
+                                <Button  variant="contained" onClick={reset}>reset</Button>
+                            </Box>
                         </Stack>
                     </CardContent>
                 </Card>
