@@ -28,11 +28,11 @@
 }
 
 .board div.nowrap {
-  white-space: nowrap;
-  width:fit-content;
+  display: flex;
+  width: fit-content;
 }
 
 .board div.hex {
   float: right;
-  font-size: 20px;
+  font-size: 18px;
 };
